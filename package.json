@@ -1,0 +1,17 @@
+{
+  "name": "tubeplay",
+  "version": "1.0.0",
+  "description": "Backend for the TubePlay. A platform like youtube.",
+  "keywords": [
+    "javascript",
+    "backend",
+    "TubePlay"
+  ],
+  "license": "ISC",
+  "author": "Sital Prakash Singh",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
