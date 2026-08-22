@@ -17,7 +17,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // to get data from form or json
     const { fullname, email, username, password } = req.body
-    console.log("email: ", email)
+    // console.log("email: ", email)
 
 
     // validation
@@ -31,10 +31,10 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // check if user already exists
-    const userExisted = User.findOne({
+    const userExisted = await User.findOne({
         $or: [{ username }, { email }]
     })
-    console.log(userExisted)
+    // console.log(userExisted)
 
     if (userExisted) {
         throw new ApiError(409, `User with email: ${email} or username: ${username} already existed`);
@@ -42,10 +42,17 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
 
-    console.log(req.files)
+    // console.log(req.files)
+    // console.log(req.files?.avatar[0])
+
     // for files
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    console.log(req.files.coverImage)
+    let coverImageLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length >0 ){
+        coverImageLocalPath = req.files.coverImage[0].path;
+    }
 
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is required..")
@@ -55,11 +62,12 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const avatar = await uploadOnCloudinary(avatarLocalPath) // it will take time to upload
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
-
+    // console.log(avatarLocalPath)
+    // console.log(avatar)
     if (!avatar) {
         throw new ApiError(400, "Avatar is required")
     }
-
+    
     // database entry
     const user = await User.create({
         fullname,
@@ -69,6 +77,7 @@ const registerUser = asyncHandler(async (req, res) => {
         password,
         username: username.toLowerCase()
     })
+    
 
     // finding the user by id and removing the password and refresh token field
 

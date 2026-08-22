@@ -10,7 +10,7 @@ const router = Router();
 
 // injecting our multer.middleware.js middle ware to handle the file like coverimage and avatar image.
 router.route("/register").post(
-    upload.fields(
+    upload.fields([
         {
             name: "avatar",
             maxCount: 1,
@@ -19,7 +19,7 @@ router.route("/register").post(
             name: "coverImage",
             maxCount: 1
         }
-    ),      // accept array so that we can access or handle multiple files
+    ]),      // accept array so that we can access or handle multiple files
     registerUser)  
 
 
